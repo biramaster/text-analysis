@@ -1,43 +1,53 @@
-import sqlite3
-from sqlite3 import Error
-from flask import Flask
+import requests
+from database import Database
 
-
-def create_connection(db_file):
-    """ create a database connection to a SQLite database """
-    conn = None
-    try:
-        conn = sqlite3.connect(db_file)
-        print(sqlite3.version)
-    except Error as e:
-        print(e)
-    finally:
-        if conn:
-            conn.close()
+from flask import Flask, request
 
 app = Flask(__name__)
 
-@app.route("/")
-def hello():
-  return "Hello, World!!!"
+@app.route('/new-article')
+def new_article():
+  word = request.args.get("query")
+  row = database.search(word.word)
+  data = row.json()
+  return data
+
 
 if __name__ == '__main__':
-    create_connection("sqlite3:/database/articles.db")
     app.run(host="0.0.0.0", port=5050)
 
+@app.get('/rest')
+async def get_rest(request):
+    restDescription = [
+        {
+        "route":"/rest",
+        "methods": ["GET"],
+        "description":"This route: The API documentation"
+        },
+        {
+        "route":"/rest/foods",
+        "methods": ["GET"],
+        "description":"List available foods"
+        },
+        {
+        "route":"/rest/food/:id",
+        "methods": ["GET"],
+        "description":"Get food matching id"
+        },
+        {
+        "route":"/rest/users",
+        "methods": ["GET"],
+        "description":"List users"
+        },
+        {
+        "route":"/rest/users",
+        "methods": ["POST"],
+        "description":"Create a user"
+        }     
+    ]
+    return json(restDescription)
 
 """
-# get function for querying
-async def get(query, values = {}):
-  rows = await db.fetch_all(query=query, values=values)
-  dicts = []
-  for row in rows:
-    dicts.append(dict(row))
-  return dicts
-
-# execute function for db
-async def run(query, values):
-  return await db.execute(query=query, values=values)
 
 
 app = Sanic("REST API")
