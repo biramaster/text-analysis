@@ -1,7 +1,6 @@
 """Basic Images API service"""
 import os
 import uuid
-import requests
 from flask import Flask, request, json, jsonify
 from dotenv import load_dotenv
 
@@ -25,7 +24,6 @@ app.config["DEBUG"] = DEBUG
 
 
 @app.route("/articles", methods=["GET", "POST"])
-# Return all articles
 def new_article():
     # read articles from the database
     if request.method == "GET":
@@ -36,8 +34,8 @@ def new_article():
         # save article in the database
         json.loads(request.data)
         article = request.get_json()
-        id = uuid.uuid1()
-        article["_id"] = id.hex
+        uniqueid = uuid.uuid1()
+        article["_id"] = uniqueid.hex
         result = articles_collection.insert_one(article)
         return {"inserted_id": result.inserted_id}
 
