@@ -5,12 +5,15 @@ const DocumentCard = ({ doc, deleteDoc }) => {
   console.log(doc);
   let title = "";
   let content = "";
+  let id = "";
   try {
     title = doc.data.title.toUpperCase();
     content = doc.data.content;
+    id = doc.data.id;
   } catch {
     title = doc.title.toUpperCase();
     content = doc.content;
+    id=doc.id;
   }
 
   return (
@@ -19,7 +22,7 @@ const DocumentCard = ({ doc, deleteDoc }) => {
       <Card.Body>
         <Card.Title> {title} </Card.Title>
         <Card.Text> {content}</Card.Text>
-        <Button variant="primary" onClick={() => deleteDoc(doc.id)}>
+        <Button variant="primary" onClick={() => deleteDoc(id)}>
           Delete
         </Button>
       </Card.Body>
