@@ -14,12 +14,11 @@ function App() {
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    console.log(textTitle);
     if (textTitle !== "") {
       fetch(`http://127.0.0.1:5050/article?query=${textTitle}`)
         .then((res) => res.json())
         .then((data) => {
-          setDocuments([{ data }]);
+          setDocuments([{data}]);
         })
         .catch((err) => {
           console.log(err);
@@ -28,16 +27,13 @@ function App() {
       fetch(`http://127.0.0.1:5050/articles?query=${textTitle}`)
         .then((res) => res.json())
         .then((data) => {
-          setDocuments([{ data }]);
-          console.log(data);
+          setDocuments(data);
         })
         .catch((err) => {
           console.log(err);
         });
     }
   };
-
-  console.log(textTitle);
 
   const handleDeleteDoc = (id) => {
     setDocuments(documents.filter((documents) => documents._id !== id));
