@@ -3,14 +3,14 @@ import { Card, Button } from "react-bootstrap";
 
 const DocumentCard = ({ doc, deleteDoc }) => {
   console.log(doc);
-  let title="";
-  let content="";
-  try{
-    title=doc.data.title.toUpperCase();
-    content=doc.data.content;
-  }catch{
-    title=doc.title.toUpperCase();
-    content=doc.content;
+  let title = "";
+  let content = "";
+  try {
+    title = doc.data.title.toUpperCase();
+    content = doc.data.content;
+  } catch {
+    title = doc.title.toUpperCase();
+    content = doc.content;
   }
 
   return (
