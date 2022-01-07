@@ -13,7 +13,7 @@ const Search = ({ textTitle, setTextTitle, handleSubmit }) => {
                   type="text"
                   value={textTitle}
                   onChange={(e) => setTextTitle(e.target.value)}
-                  placeholder="Enter a title..."
+                  placeholder="Enter a title...Case sensitive..."
                 />
               </Col>
               <Col>
