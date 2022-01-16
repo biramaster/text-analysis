@@ -2,7 +2,7 @@ import { Card, Form, Button, Row, Col } from "react-bootstrap";
 
 
 const SearchCard = ({
-  document,
+  id,
   searchRes,
   updateSearchRes,
   question,
@@ -13,7 +13,7 @@ const SearchCard = ({
     <Card style={{ width: "18rem" }}>
       <Card.Body>
         <p>Answer: {searchRes}</p>
-        <Form className="pb-3" onSubmit={handleSubmit}>
+        <Form className="pb-3" onSubmit={(e) => handleSubmit(e, id)}>
           <Row>
             <Col>
               <Form.Control 

@@ -15,12 +15,14 @@ function App() {
   const [question, setQuestion] = useState("");
   const [searchRes, updateSearchRes] = useState([]);
 
-  const performSearch = (e,document) => {
+  const performSearch = (e, id) => {
     e.preventDefault();
+    console.log(id);
+    
 
     fetch(`http://localhost:5050/question?query=${question}`)
       .then((response) => response.json(), err => alert(err)) 
-      .then((data) => changeContent(data, document.id))
+      .then((data) => changeContent(data, id))
       .catch((err) => {
         console.log(err);
       });
@@ -28,7 +30,7 @@ function App() {
 
   const changeContent = (res, id) => {
     const response = res.choices[0].text;
-    console.log(response);
+    console.log(id);
     documents.map((document, i) =>
       document._id === id
         ? (document.content = document.content + " " + response)
@@ -100,7 +102,7 @@ function App() {
                 <Row>
                   <SearchCard
                     className="pb-3"
-                    doc={document}
+                    id={document._id}
                     question={question}
                     setQuestion={setQuestion}
                     searchRes={searchRes}
