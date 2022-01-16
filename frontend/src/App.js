@@ -15,40 +15,23 @@ function App() {
   const [question, setQuestion] = useState("");
   const [searchRes, updateSearchRes] = useState([]);
 
-  function status(response) {
-    if (response.status >= 200 && response.status < 300) {
-      return Promise.resolve(response);
-    } else {
-      return Promise.reject(new Error(response.statusText));
-    }
-  }
-
-  function json(response) {
-    return response.json();
-  }
-
-  const performSearch = (e) => {
+  const performSearch = (e,document) => {
     e.preventDefault();
 
-    fetch(`http://localhost:5050/question?query=${question}`, {
-      mode: "no-cors",
-    })
-      .then(status)
-      .then(json) 
-      .then((data) => {   
-        updateSearchRes("I don't know.");
-      })
+    fetch(`http://localhost:5050/question?query=${question}`)
+      .then((response) => response.json(), err => alert(err)) 
+      .then((data) => changeContent(data, document.id))
       .catch((err) => {
         console.log(err);
       });
   };
 
   const changeContent = (res, id) => {
-    console.log(res);
-    var respons = res.data.choices[0]["text"];
+    const response = res.choices[0].text;
+    console.log(response);
     documents.map((document, i) =>
       document._id === id
-        ? (document.content = document.content + " " + respons)
+        ? (document.content = document.content + " " + response)
         : ""
     );
   };
@@ -58,7 +41,7 @@ function App() {
     console.log(e.target.value);
     if (textTitle !== "") {
       fetch(`http://127.0.0.1:5050/article?query=${textTitle}`)
-        .then((res) => res.json())
+        .then((response) => response.json(), err => alert(err))
         .then((data) => {
           setDocuments([{ data }]);
         })
@@ -67,7 +50,7 @@ function App() {
         });
     } else {
       fetch(`http://127.0.0.1:5050/articles?query=${textTitle}`)
-        .then((res) => res.json())
+        .then((response) => response.json(), err => alert(err))
         .then((data) => {
           setDocuments(data);
         })
@@ -79,22 +62,18 @@ function App() {
 
   const handleDeleteDoc = (id) => {
     setDocuments(documents.filter((documents) => documents._id !== id));
+    fetch(`http://127.0.0.1:5050/article?query=${id}`, {
+      method: "DELETE",
+    })
   };
 
   const handleAnalyseDocAPI = (id) => {
-    fetch(`http://localhost:5050/analyse?query=${id}`, {
-      mode: "no-cors",
-    })
-      .then(status)
-      .then(json)
-      .then((data) => {
-        console.log(data);
-        changeContent(data, id);
-        setDocuments(documents.filter((documents) => documents._id === id));
+    fetch(`http://localhost:5050/analyse?query=${id}`)
+      .then((response) => response.json(), err => alert(err))
+      .then((data) => changeContent(data, id))
+      .catch(err => {
+        console.error(`${err}`);
       })
-      .catch((err) => {
-        console.log(err);
-      });
   };
 
   return (

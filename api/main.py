@@ -43,7 +43,6 @@ def analyseQuestion():
         presence_penalty=0,
         stop=["#"],
     )
-    print(response)
     return jsonify(response)
 
 
@@ -67,12 +66,20 @@ def analyseArticle():
     return jsonify(response)
 
 
-@app.route("/article", methods=["GET"])
+@app.route("/article", methods=["GET", "DELETE"])
 # read article from the database
 def article():
-    title = request.args.get("query")
-    art = articles_collection.find_one({"title": title})
-    return jsonify(art)
+    # read one article from the database
+    if request.method == "GET":
+        title = request.args.get("query")
+        art = articles_collection.find_one({"title": title})
+        return jsonify(art)
+
+    # read one article from the database
+    if request.method == "DELETE":
+        id = request.args.get("query")
+        result = articles_collection.delete_one({"_id": id})
+        return {"deleted_id": id}
 
 
 @app.route("/articles", methods=["GET", "POST"])
